@@ -3,6 +3,15 @@
 #include <iostream>
 using namespace std;
 
+typedef int T;
+template<T a, T b>
+class double_list {
+    template<typename T>
+    class node {
+
+    }
+};
+
 struct Node                             //Структура, являющаяся звеном списка
  {
      int x;                             //Значение x будет передаваться в список
