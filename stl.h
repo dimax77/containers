@@ -6,7 +6,7 @@
 template <typename T>
 class Double_list {
  public:
-  class iterator;
+  // class iterator;
   friend class iterator;  // класс итератора должен иметь доступ к полям класса
                           // Double_list
  private:
