@@ -6,7 +6,8 @@ namespace s21 {
 template <class T>
 class List {
  public:
-  using value_type = T;
+  // using value_type = T;
+  typedef T value_type;
   using reference = T &;
   using const_reference = const T &;
   using iterator = T *;
