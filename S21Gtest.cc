@@ -60,6 +60,12 @@ TEST(Methods, pop_front) {
   EXPECT_EQ(d.size(), 0);
   EXPECT_NO_THROW(d.pop_front());
 }
+TEST(Iterator, default) {
+  List<int> l({1, 2, 3});
+  List<int>::Iterator it = l.begin();
+  for (auto i : l) cout << i;  // *Iter
+  cout << endl;
+}
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
