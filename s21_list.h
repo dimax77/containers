@@ -9,16 +9,17 @@ class List {
   using value_type = T;
   using reference = T&;
   using const_reference = const T&;
-  using iterator = T*;
-  using const_iterator = const T*;
+  // using iterator = T*;
+  // using const_iterator = const T*;
   using size_type = size_t;
 
  private:
   struct Node;  // Declare for Iterator have access
 
  public:
-  // Iterator struct
-  struct Iterator {
+  // Iterator class
+  class Iterator {
+   public:
     Iterator() : n_(0) {}
     Iterator(Node* n) : n_(n) {}
     Iterator(const Iterator& it) : n_(it.n_) {}
@@ -47,11 +48,22 @@ class List {
       n_ = n_->prev_;
       return tmp;
     }
-    T& operator*() const { return n_->val_; }
+    reference operator*() { return n_->val_; }
 
-   private:
+   protected:
     Node* n_;
   };
+
+  class ConstIterator : public Iterator {
+   public:
+    ConstIterator() { this->n_ = 0; }
+    ConstIterator(Node* n) { this->n_ = n; }
+    ConstIterator(const Iterator& it) { this->n_ = it.n; }
+    const_reference operator*() { return this->n_->val_; }
+  };
+
+  using const_iterator = const ConstIterator;
+  using iterator = Iterator;
 
   // Constuctors
   List() {
@@ -92,6 +104,9 @@ class List {
 
   Iterator begin() { return head_; }
   Iterator end() { return base_; }
+
+  const_iterator begin() const { return head_; }
+  const_iterator end() const { return base_; }
 
   bool empty() { return head_ == base_; }
   size_t size() {
