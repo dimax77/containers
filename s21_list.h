@@ -13,8 +13,11 @@ class List {
   using const_iterator = const T*;
   using size_type = size_t;
 
-  struct Node;
+ private:
+  struct Node;  // Declare for Iterator have access
 
+ public:
+  // Iterator struct
   struct Iterator {
     Iterator() : n_(0) {}
     Iterator(Node* n) : n_(n) {}
@@ -39,13 +42,18 @@ class List {
       n_ = n_->prev_;
       return *this;
     }
+    Iterator operator--(int) {
+      Iterator tmp = *this;
+      n_ = n_->prev_;
+      return tmp;
+    }
     T& operator*() const { return n_->val_; }
 
    private:
     Node* n_;
   };
 
-  // constuctors
+  // Constuctors
   List() {
     try {
       base_ = new Node();
@@ -63,7 +71,9 @@ class List {
   List(std::initializer_list<value_type> const& items) : List() {
     for (auto it : items) push_back(it);
   }
-  // List(const List &l) : List() {}
+  List(const List& l) : List() {
+    for (auto el : l) push_back(el);
+  }
   // List(List &&l) {}
   ~List() {
     base_->next_ = 0;
@@ -74,12 +84,27 @@ class List {
       head_ = tmp;
     }
   }
-
-  // methods
   // List& operator=(List &&l) {}
+
+  // Methods
   const_reference front() { return head_->val_; };
   const_reference back() { return tail_->val_; };
-  void push_back(value_type val) {
+
+  Iterator begin() { return head_; }
+  Iterator end() { return base_; }
+
+  bool empty() { return head_ == base_; }
+  size_t size() {
+    int count{};
+    for (Node* n = head_; n != base_; n = n->next_) count++;
+    return count;
+  }
+  size_type max_size() { return size(); }
+
+  void clear() {}
+  iterator insert(iterator pos, const_reference value) {}
+  void erase(iterator pos) {}
+  void push_back(const_reference val) {
     Node* tmp = 0;
     try {
       tmp = new Node(val);
@@ -104,7 +129,7 @@ class List {
     }
     delete tmp;
   };
-  void push_front(value_type val) {
+  void push_front(const_reference val) {
     Node* tmp = 0;
     try {
       tmp = new Node(val);
@@ -134,14 +159,25 @@ class List {
     }
     delete tmp;
   };
-  size_t size() {
-    int count{};
-    for (Node* n = head_; n != base_; n = n->next_) count++;
-    return count;
+  void swap(List& other) {
+    Node* tmp_base = this->base_;
+    Node* tmp_head = this->head_;
+    Node* tmp_tail = this->tail_;
+    this->base_ = other.base_;
+    this->head_ = other.head_;
+    this->tail_ = other.tail_;
+    other.base_ = tmp_base;
+    other.head_ = tmp_head;
+    other.tail_ = tmp_tail;
   }
-  Iterator begin() { return head_; }
-  Iterator end() { return base_; }
+  void merge(List& other) {}
+  void splice(const_iterator pos, List& other) {}
+  void reverse() {}
+  void unique() {}
+  void sort() {}
 
+ private:
+  // Node struct
   struct Node {
     value_type val_;
     Node *next_, *prev_;

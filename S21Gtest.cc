@@ -18,7 +18,12 @@ TEST(Constructors, list) {
   List<int> a({1, 2, 3, 4, 5});
   EXPECT_EQ(a.size(), 5);
 }
-
+TEST(Constructors, copy) {
+  List<int> a({1, 2, 3, 4, 5});
+  auto b(a);
+  auto it = a.begin();
+  for (auto el : b) EXPECT_EQ(el, *(it++));
+}
 TEST(Methods, push_back) {
   List<int> a;
   a.push_back(3);
@@ -60,11 +65,24 @@ TEST(Methods, pop_front) {
   EXPECT_EQ(d.size(), 0);
   EXPECT_NO_THROW(d.pop_front());
 }
+TEST(Methods, swap) {
+  List<int> a({1, 2, 3, 4}), b({4, 3, 2, 1});
+  a.swap(b);
+  int i = 1;
+  for (auto el : b) EXPECT_EQ(el, i++);
+}
 TEST(Iterator, default) {
   List<int> l({1, 2, 3});
   List<int>::Iterator it = l.begin();
-  for (auto i : l) cout << i;  // *Iter
-  cout << endl;
+  for (auto i : l)  // *Iter
+    EXPECT_EQ(*(it++), i);
+}
+TEST(Iterator, inc_decr) {
+  List<int> l({1, 2, 3});
+  List<int>::Iterator it = l.begin();
+  EXPECT_EQ(*(++it), 2);
+  EXPECT_EQ(*(it++), 2);
+  EXPECT_EQ(*(--it), 2);
 }
 
 int main(int argc, char* argv[]) {
