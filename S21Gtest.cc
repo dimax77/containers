@@ -24,6 +24,14 @@ TEST(Constructors, copy) {
   auto it = a.begin();
   for (auto el : b) EXPECT_EQ(el, *(it++));
 }
+TEST(Constructors, move) {
+  List<int> a({1, 2, 3, 4, 5});
+  auto b = std::move(a);
+  EXPECT_EQ(a.size(), 0);
+  EXPECT_EQ(b.size(), 5);
+  int i = 1;
+  for (auto el : b) EXPECT_EQ(el, i++);
+}
 TEST(Methods, push_back) {
   List<int> a;
   a.push_back(3);
