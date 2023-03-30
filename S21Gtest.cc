@@ -81,6 +81,12 @@ TEST(Methods, pop_front) {
   EXPECT_EQ(d.size(), 0);
   EXPECT_NO_THROW(d.pop_front());
 }
+TEST(Methods, merge) {
+  List<int> a({1, 2, 3, 4}), b({5, 6, 7, 8});
+  a.merge(b);
+  int i = 1;
+  for (auto el : b) EXPECT_EQ(el, i++);
+}
 TEST(Methods, swap) {
   List<int> a({1, 2, 3, 4}), b({4, 3, 2, 1});
   a.swap(b);

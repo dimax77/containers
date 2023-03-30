@@ -97,17 +97,7 @@ class List {
     l.count = 0;
   }
   ~List() { delete_all_nodes(); }
-  void delete_all_nodes() {
-    if (base_) {
-      base_->next_ = 0;
-      Node* tmp = 0;
-      while (head_ != 0) {
-        tmp = head_->next_;
-        delete head_;
-        head_ = tmp;
-      }
-    }
-  }
+
   List& operator=(List&& l) {
     delete_all_nodes();
     this->base_ = l.base_;
@@ -116,6 +106,12 @@ class List {
     this->count = l.count;
     l.base_ = l.head_ = l.tail_ = nullptr;
     l.count = 0;
+    return *this;
+  }
+  List& operator=(const List& l) {
+    delete_all_nodes();
+    for(auto it = l.begin(); it != l.end();)
+      push_back(*(it++));
     return *this;
   }
 
@@ -209,13 +205,46 @@ class List {
     other.tail_ = tmp_tail;
     other.count = tmp_count;
   }
-  void merge(List& other) {}
+  void merge(List& other) {
+    auto it_this_cur = begin();
+    auto it_this_end = end();
+    auto it_other_cur = other.begin();
+    auto it_other_end = other.end();
+    s21::List<T> tmp;
+    while (it_this_cur != it_this_end) {
+      while (it_other_cur != it_other_end) {
+        if (*it_this_cur > *it_other_cur)
+          tmp.push_back(*(it_other_cur++));
+        else
+          tmp.push_back(*(it_this_cur++));
+        break;
+      }
+    }
+    while(it_this_cur != it_this_end)
+    {tmp.push_back(*(it_this_cur++));}
+    while(it_other_cur != it_other_end)
+    {}
+    *this = tmp;
+  }
   void splice(const_iterator pos, List& other) {}
   void reverse() {}
   void unique() {}
   void sort() {}
 
  private:
+  // Inner functions
+  void delete_all_nodes() {
+    if (base_) {
+      base_->next_ = 0;
+      Node* tmp = 0;
+      while (head_ != 0) {
+        tmp = head_->next_;
+        delete head_;
+        head_ = tmp;
+      }
+    }
+  }
+
   // Node struct
   struct Node {
     value_type val_;
