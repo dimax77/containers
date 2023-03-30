@@ -90,21 +90,23 @@ class List {
       push_back(el);
     }
   }
-  List(List&& l) : List() {
+  List(List&& l) {
     this->base_ = l.base_;
     this->head_ = l.head_;
     this->tail_ = l.tail_;
     this->count = l.count;
-    l.head_ = l.tail_ = nullptr;
+    l.base_ = l.head_ = l.tail_ = nullptr;
     l.count = 0;
   }
   ~List() {
-    base_->next_ = 0;
-    Node* tmp = 0;
-    while (head_ != 0) {
-      tmp = head_->next_;
-      delete head_;
-      head_ = tmp;
+    if (base_) {
+      base_->next_ = 0;
+      Node* tmp = 0;
+      while (head_ != 0) {
+        tmp = head_->next_;
+        delete head_;
+        head_ = tmp;
+      }
     }
   }
   // List& operator=(List &&l) {}
