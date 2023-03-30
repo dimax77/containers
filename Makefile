@@ -3,10 +3,9 @@ CXX=gcc
 CXXFLAGS+=--std=c++17 -g -Wall -Werror -Wextra --coverage
 TESTFILE=S21Gtest.cc
 TESTFLAGS=-lgtest -lgcov -lm -lpthread -lstdc++
-HTML=lcov -t test -o rep.info -c -d ./
 OS=$(shell uname)
 
-all: clean test
+all: clean check
 
 clean:
 	rm -rf *.o *.a *.so *.gcda *.gcno *.gch rep.info *.html *.css test report *.txt *.dSYM
@@ -21,5 +20,5 @@ check: test
 ifeq ($(OS), Darwin)
 	leaks --atExit -- test
 else
-	CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes ./test
+	CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./test
 endif

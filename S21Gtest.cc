@@ -32,6 +32,14 @@ TEST(Constructors, move) {
   int i = 1;
   for (auto el : b) EXPECT_EQ(el, i++);
 }
+TEST(Operators, equal_move) {
+  List<int> a({1, 2, 3, 4, 5}), b;
+  b = std::move(a);
+  EXPECT_EQ(a.size(), 0);
+  EXPECT_EQ(b.size(), 5);
+  size_t i{};
+  for (auto el : b) EXPECT_EQ(el, ++i);
+}
 TEST(Methods, push_back) {
   List<int> a;
   a.push_back(3);

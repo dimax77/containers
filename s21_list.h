@@ -9,8 +9,6 @@ class List {
   using value_type = T;
   using reference = T&;
   using const_reference = const T&;
-  // using iterator = T*;
-  // using const_iterator = const T*;
   using size_type = size_t;
 
  private:
@@ -98,7 +96,8 @@ class List {
     l.base_ = l.head_ = l.tail_ = nullptr;
     l.count = 0;
   }
-  ~List() {
+  ~List() { delete_all_nodes(); }
+  void delete_all_nodes() {
     if (base_) {
       base_->next_ = 0;
       Node* tmp = 0;
@@ -109,14 +108,23 @@ class List {
       }
     }
   }
-  // List& operator=(List &&l) {}
+  List& operator=(List&& l) {
+    delete_all_nodes();
+    this->base_ = l.base_;
+    this->head_ = l.head_;
+    this->tail_ = l.tail_;
+    this->count = l.count;
+    l.base_ = l.head_ = l.tail_ = nullptr;
+    l.count = 0;
+    return *this;
+  }
 
   // Methods
   const_reference front() { return head_->val_; };
   const_reference back() { return tail_->val_; };
 
-  Iterator begin() { return head_; }
-  Iterator end() { return base_; }
+  iterator begin() { return head_; }
+  iterator end() { return base_; }
 
   const_iterator begin() const { return head_; }
   const_iterator end() const { return base_; }
@@ -222,7 +230,7 @@ class List {
     }
   };
   Node *base_, *head_, *tail_;
-  size_t count{};
+  size_type count{};
 };
 };      // namespace s21
 #endif  // S21_LIST_H_
