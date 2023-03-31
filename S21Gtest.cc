@@ -91,12 +91,14 @@ TEST(Methods, pop_front) {
   EXPECT_NO_THROW(d.pop_front());
 }
 TEST(Methods, merge) {
-  List<int> a({1, 2, 3, 4}), b({5, 6, 7, 8});
+  List<int> a({1, 2, 3, 6}), b({5, 6, 7, 8, 9});
   a.merge(b);
-  for (auto el : a) cout << el << endl;
-  EXPECT_EQ(a.size() + b.size(), 8);
+  EXPECT_EQ(a.size(), 9);
+  List<int> c({1, 2, 3, 4}), d({5, 6, 7, 8, 9, 10});
+  c.merge(d);
+  EXPECT_EQ(c.size(), 10);
   int i = 1;
-  // for (auto el : b) EXPECT_EQ(el, i++);
+  for (auto el : c) EXPECT_EQ(el, i++);
 }
 TEST(Methods, swap) {
   List<int> a({1, 2, 3, 4}), b({4, 3, 2, 1});

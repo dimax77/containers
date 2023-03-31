@@ -109,7 +109,7 @@ class List {
     return *this;
   }
   List& operator=(const List& l) {
-    for (size_t c = size(); c > 0; c--) pop_back();
+    while (head_ != base_) pop_back();
     for (auto it = l.begin(); it != l.end();) push_back(*(it++));
     return *this;
   }
@@ -213,8 +213,9 @@ class List {
     s21::List<T> tmp;
     while (it_this_cur != it_this_end) {
       while (it_other_cur != it_other_end) {
-        std::cout << "ok\n";
         if (*it_this_cur > *it_other_cur) {
+          tmp.push_back(*it_other_cur++);
+        } else if (*it_this_cur == *it_other_cur) {
           tmp.push_back(*it_other_cur++);
         } else {
           tmp.push_back(*it_this_cur++);
