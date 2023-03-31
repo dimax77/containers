@@ -106,6 +106,13 @@ TEST(Methods, swap) {
   int i = 1;
   for (auto el : b) EXPECT_EQ(el, i++);
 }
+TEST(Methods, splice) {
+  List<int> a({1, 2, 3, 4}), b({5, 6, 7, 8});
+  auto it = --a.end();
+  a.splice(it, b);
+  int i = 1;
+  for (auto el : a) EXPECT_EQ(el, i++);
+}
 TEST(Iterator, default) {
   List<int> l({1, 2, 3});
   List<int>::Iterator it = l.begin();

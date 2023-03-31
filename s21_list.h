@@ -56,7 +56,7 @@ class List {
    public:
     ConstIterator() { this->n_ = 0; }
     ConstIterator(Node* n) { this->n_ = n; }
-    ConstIterator(const Iterator& it) { this->n_ = it.n; }
+    ConstIterator(const Iterator& it) { this->n_ = it.n_; }
     const_reference operator*() { return this->n_->val_; }
   };
 
@@ -232,7 +232,11 @@ class List {
     }
     *this = tmp;
   }
-  void splice(const_iterator pos, List& other) {}
+  void splice(const_iterator pos, List& other) {
+    pos.
+    // tmp->next_ = other.head_;
+    // other.tail_ = tmp->next_;
+  }
   void reverse() {}
   void unique() {}
   void sort() {}
