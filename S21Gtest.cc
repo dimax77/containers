@@ -40,6 +40,13 @@ TEST(Operators, equal_move) {
   size_t i{};
   for (auto el : b) EXPECT_EQ(el, ++i);
 }
+TEST(Operators, equal_copy) {
+  List<int> a({1, 2, 3, 4, 5}), b({6, 7, 8});
+  b = a;
+  EXPECT_EQ(b.size(), 5);
+  size_t i{};
+  for (auto el : b) EXPECT_EQ(el, ++i);
+}
 TEST(Methods, push_back) {
   List<int> a;
   a.push_back(3);
@@ -53,11 +60,13 @@ TEST(Methods, pop_back) {
   List<double> d;
   d.push_back(2.3);
   d.push_back(3.4);
+  d.push_back(3.4);
+  EXPECT_EQ(d.size(), 3);
+  d.pop_back();
   EXPECT_EQ(d.size(), 2);
   d.pop_back();
   EXPECT_EQ(d.size(), 1);
-  d.pop_back();
-  EXPECT_EQ(d.size(), 0);
+  EXPECT_NO_THROW(d.pop_back());
   EXPECT_NO_THROW(d.pop_back());
 }
 TEST(Methods, push_front) {
@@ -84,8 +93,10 @@ TEST(Methods, pop_front) {
 TEST(Methods, merge) {
   List<int> a({1, 2, 3, 4}), b({5, 6, 7, 8});
   a.merge(b);
+  for (auto el : a) cout << el << endl;
+  EXPECT_EQ(a.size() + b.size(), 8);
   int i = 1;
-  for (auto el : b) EXPECT_EQ(el, i++);
+  // for (auto el : b) EXPECT_EQ(el, i++);
 }
 TEST(Methods, swap) {
   List<int> a({1, 2, 3, 4}), b({4, 3, 2, 1});

@@ -109,9 +109,8 @@ class List {
     return *this;
   }
   List& operator=(const List& l) {
-    delete_all_nodes();
-    for(auto it = l.begin(); it != l.end();)
-      push_back(*(it++));
+    for (size_t c = size(); c > 0; c--) pop_back();
+    for (auto it = l.begin(); it != l.end();) push_back(*(it++));
     return *this;
   }
 
@@ -148,16 +147,17 @@ class List {
     count++;
   };
   void pop_back() {
-    if (head_ == base_) return;
-    Node* tmp = tail_;
-    if (tail_->prev_ == base_) {
-      head_ = tail_ = base_;
-    } else {
-      tail_ = tail_->prev_;
-      tail_->next_ = base_;
-    }
-    count--;
-    delete tmp;
+    if (head_ != base_) {
+      Node* tmp = tail_;
+      if (tail_->prev_ == base_) {
+        head_ = tail_ = base_;
+      } else {
+        tail_ = tail_->prev_;
+        tail_->next_ = base_;
+      }
+      count--;
+      delete tmp;
+    };
   };
   void push_front(const_reference val) {
     Node* tmp = 0;
@@ -213,17 +213,22 @@ class List {
     s21::List<T> tmp;
     while (it_this_cur != it_this_end) {
       while (it_other_cur != it_other_end) {
-        if (*it_this_cur > *it_other_cur)
-          tmp.push_back(*(it_other_cur++));
-        else
-          tmp.push_back(*(it_this_cur++));
-        break;
+        std::cout << "ok\n";
+        if (*it_this_cur > *it_other_cur) {
+          tmp.push_back(*it_other_cur++);
+        } else {
+          tmp.push_back(*it_this_cur++);
+          break;
+        }
       }
+      if (it_other_cur == it_other_end) break;
     }
-    while(it_this_cur != it_this_end)
-    {tmp.push_back(*(it_this_cur++));}
-    while(it_other_cur != it_other_end)
-    {}
+    while (it_this_cur != it_this_end) {
+      tmp.push_back(*(it_this_cur++));
+    }
+    while (it_other_cur != it_other_end) {
+      tmp.push_back(*(it_other_cur++));
+    }
     *this = tmp;
   }
   void splice(const_iterator pos, List& other) {}
