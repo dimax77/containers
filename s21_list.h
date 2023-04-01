@@ -248,8 +248,50 @@ class List {
     other.head_ = other.base_;
     other.count = 0;
   }
-  void reverse() {}
-  void unique() {}
+  void reverse() {
+    base_->next_ = tail_;
+    base_->prev_ = head_;
+
+    while (head_ != tail_) {
+      reverse_node(head_);
+      head_ = head_->prev_;
+    }
+    reverse_node(tail_);
+  }
+  void unique() {
+    Node* tmp = head_;
+    Node* ne = tmp->next_;
+    auto it = ++begin();
+    auto tmp_it = it;
+    tmp_it++;
+    while (tmp != base_) {
+      for (it; it != end(); ++it) {
+        if (tmp->val_ == *it) {
+          Node* p = tmp->prev_;
+          Node* n = tmp->next_;
+          p->next_ = n;
+          n->prev_ = p;
+          if (tmp->prev_ == base_) head_ = tmp->next_;
+          if (tmp->next_ == base_) tail_ = tmp->prev_;
+          delete tmp;
+          count--;
+          tmp = 0;
+          break;
+        }
+      }
+      if (tmp) {
+        tmp = tmp->next_;
+        ne = tmp->next_;
+        it = tmp_it;
+        tmp_it++;
+      } else {
+        tmp = ne;
+        ne = ne->next_;
+        it = tmp_it;
+        tmp_it++;
+      }
+    }
+  }
   void sort() {}
 
  private:
@@ -264,6 +306,11 @@ class List {
         head_ = tmp;
       }
     }
+  }
+  void reverse_node(Node* p) {
+    Node* tmp = p->prev_;
+    p->prev_ = p->next_;
+    p->next_ = tmp;
   }
 
   // Node struct

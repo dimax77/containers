@@ -126,6 +126,20 @@ TEST(Methods, splice) {
   i = 1;
   for (auto el : j) EXPECT_EQ(el, i++);
 }
+TEST(Methods, reverse) {
+  List<int> a({5, 4, 3, 2, 1});
+  a.reverse();
+  int i = 1;
+  for (auto el : a) EXPECT_EQ(el, i++);
+}
+TEST(Methods, unique) {
+  List<int> a({5, 5, 4, 4, 4, 4, 3, 2, 1, 1});
+  a.reverse();
+  a.unique();
+  int i = 1;
+  for (auto el : a) EXPECT_EQ(el, i++);
+  EXPECT_EQ(a.size(), 5);
+}
 TEST(Iterator, default) {
   List<int> l({1, 2, 3});
   List<int>::Iterator it = l.begin();
