@@ -107,11 +107,23 @@ TEST(Methods, swap) {
   for (auto el : b) EXPECT_EQ(el, i++);
 }
 TEST(Methods, splice) {
-  List<int> a({1, 2, 3, 4}), b({5, 6, 7, 8});
-  auto it = a.end();
+  List<int> a({5, 6, 7, 8}), b({1, 2, 3, 4});
+  auto it = ++a.end();
   a.splice(it, b);
   int i = 1;
   for (auto el : a) EXPECT_EQ(el, i++);
+  List<int> c({1, 2, 3, 4}), d({5, 6, 7, 8});
+  it = c.end();
+  c.splice(it, d);
+  i = 1;
+  for (auto el : c) EXPECT_EQ(el, i++);
+  List<int> j({1, 2, 7, 8}), k({3, 4, 5, 6});
+  it = j.begin();
+  it++;
+  it++;
+  j.splice(it, k);
+  i = 1;
+  for (auto el : j) EXPECT_EQ(el, i++);
 }
 TEST(Iterator, default) {
   List<int> l({1, 2, 3});

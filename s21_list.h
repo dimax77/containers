@@ -142,10 +142,9 @@ class List {
     }
     if (head_ == base_) {
       head_ = tmp;
-      base_->next_ = tmp;
-      base_->prev_ = tail_;
     }
     tail_->next_ = tmp;
+    base_->prev_ = tmp;
     tmp->prev_ = tail_;
     tmp->next_ = base_;
     tail_ = tmp;
@@ -239,13 +238,7 @@ class List {
   }
   void splice(const_iterator pos, List& other) {
     Node* tmp = pos.getnode();
-    std::cout << "----pos addr------\n"
-              << *pos << std::endl
-              << "------------\n";
     Node* prev = tmp->prev_;
-    std::cout << "----pos.prev addr------\n"
-              << tmp->prev_ << std::endl
-              << "------------\n";
     prev->next_ = other.head_;
     other.head_->prev_ = prev;
     other.tail_->next_ = tmp;
