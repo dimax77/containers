@@ -112,7 +112,8 @@ TEST(Methods, splice) {
   a.splice(it, b);
   int i = 1;
   for (auto el : a) EXPECT_EQ(el, i++);
-  List<int> c({1, 2, 3, 4}), d({5, 6, 7, 8});
+  List<int> d({1, 2, 3, 4}), c({5, 6, 7, 8});
+  d.swap(c);
   it = c.end();
   c.splice(it, d);
   i = 1;
