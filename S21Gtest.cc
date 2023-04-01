@@ -47,6 +47,39 @@ TEST(Operators, equal_copy) {
   size_t i{};
   for (auto el : b) EXPECT_EQ(el, ++i);
 }
+TEST(Methods, clear) {
+  List<int> a({1, 2, 3, 4, 5});
+  EXPECT_EQ(a.size(), 5);
+  size_t i{};
+  a.clear();
+  EXPECT_EQ(a.size(), 0);
+}
+TEST(Methods, insert) {
+  List<int> a({2, 3, 4, 5});
+  auto it = a.begin();
+  a.insert(it, 1);
+  size_t i{};
+  for (auto el : a) EXPECT_EQ(el, ++i);
+  it = a.end();
+  a.insert(it, 6);
+  i = 0;
+  for (auto el : a) EXPECT_EQ(el, ++i);
+  EXPECT_EQ(a.size(), 6);
+}
+TEST(Methods, erase) {
+  List<int> a({1, 1, 2, 3, 4, 5, 6});
+  auto it = a.begin();
+  a.erase(it);
+  size_t i{};
+  for (auto el : a) EXPECT_EQ(el, ++i);
+  it = --a.end();
+  a.erase(it);
+  i = 0;
+  for (auto el : a) EXPECT_EQ(el, ++i);
+  EXPECT_EQ(a.size(), 5);
+  it = a.end();
+  EXPECT_THROW(a.erase(it), std::invalid_argument);
+}
 TEST(Methods, push_back) {
   List<int> a;
   a.push_back(3);
@@ -143,8 +176,7 @@ TEST(Methods, unique) {
 TEST(Iterator, default) {
   List<int> l({1, 2, 3});
   List<int>::Iterator it = l.begin();
-  for (auto i : l)  // *Iter
-    EXPECT_EQ(*(it++), i);
+  for (auto i : l) EXPECT_EQ(*(it++), i);
 }
 TEST(Iterator, inc_decr) {
   List<int> l({1, 2, 3});

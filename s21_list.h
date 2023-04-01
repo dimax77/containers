@@ -48,6 +48,7 @@ class List {
     }
     reference operator*() { return n_->val_; }
     Node* getnode() const { return n_; }
+    void setnode(Node* n) { n_ = n; }
 
    protected:
     Node* n_;
@@ -55,10 +56,8 @@ class List {
 
   class ConstIterator : public Iterator {
    public:
-    ConstIterator() : iterator() {}
     ConstIterator(Node* n) : iterator(n) {}
     ConstIterator(const Iterator& it) : iterator(it) {}
-    const_reference operator*() const { return this->n_->val_; }
   };
 
   using const_iterator = const ConstIterator;
@@ -129,9 +128,35 @@ class List {
   size_t size() { return count; }
   size_type max_size() { return size(); }
 
-  void clear() {}
-  iterator insert(iterator pos, const_reference value) {}
-  void erase(iterator pos) {}
+  void clear() {
+    while (head_ != base_) pop_back();
+  }
+  iterator insert(iterator pos, const_reference value) {
+    Node* tmp = pos.getnode();
+    Node* prev = tmp->prev_;
+    Node* new_n = new Node(value);
+    prev->next_ = new_n;
+    new_n->prev_ = prev;
+    new_n->next_ = tmp;
+    tmp->prev_ = new_n;
+    if (prev == base_) head_ = new_n;
+    if (tmp == base_) tail_ = new_n;
+    pos.setnode(new_n);
+    count++;
+    return pos;
+  }
+  void erase(iterator pos) {
+    Node* tmp = pos.getnode();
+    if (tmp == base_) throw std::invalid_argument("erase(): invalid pointer");
+    Node* prev = tmp->prev_;
+    Node* next = tmp->next_;
+    prev->next_ = next;
+    next->prev_ = prev;
+    if (prev == base_) head_ = next;
+    if (next == base_) tail_ = prev;
+    delete tmp;
+    count--;
+  }
   void push_back(const_reference val) {
     Node* tmp = 0;
     try {
