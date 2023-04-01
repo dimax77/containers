@@ -57,8 +57,8 @@ class List {
    public:
     ConstIterator() : iterator() {}
     ConstIterator(Node* n) : iterator(n) {}
-    ConstIterator(const Iterator& it) {}
-    const_reference operator*() { return this->n_->val_; }
+    ConstIterator(const Iterator& it) : iterator(it) {}
+    const_reference operator*() const { return this->n_->val_; }
   };
 
   using const_iterator = const ConstIterator;
@@ -140,7 +140,11 @@ class List {
       std::cerr << e.what() << '\n';
       return;
     }
-    if (head_ == base_) head_ = tmp;
+    if (head_ == base_) {
+      head_ = tmp;
+      base_->next_ = tmp;
+      base_->prev_ = tail_;
+    }
     tail_->next_ = tmp;
     tmp->prev_ = tail_;
     tmp->next_ = base_;
@@ -235,7 +239,13 @@ class List {
   }
   void splice(const_iterator pos, List& other) {
     Node* tmp = pos.getnode();
+    std::cout << "----pos addr------\n"
+              << *pos << std::endl
+              << "------------\n";
     Node* prev = tmp->prev_;
+    std::cout << "----pos.prev addr------\n"
+              << tmp->prev_ << std::endl
+              << "------------\n";
     prev->next_ = other.head_;
     other.head_->prev_ = prev;
     other.tail_->next_ = tmp;
