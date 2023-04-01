@@ -47,6 +47,7 @@ class List {
       return tmp;
     }
     reference operator*() { return n_->val_; }
+    Node* getnode() const { return n_; }
 
    protected:
     Node* n_;
@@ -54,9 +55,9 @@ class List {
 
   class ConstIterator : public Iterator {
    public:
-    ConstIterator() { this->n_ = 0; }
-    ConstIterator(Node* n) { this->n_ = n; }
-    ConstIterator(const Iterator& it) { this->n_ = it.n_; }
+    ConstIterator() : iterator() {}
+    ConstIterator(Node* n) : iterator(n) {}
+    ConstIterator(const Iterator& it) {}
     const_reference operator*() { return this->n_->val_; }
   };
 
@@ -233,9 +234,16 @@ class List {
     *this = tmp;
   }
   void splice(const_iterator pos, List& other) {
-    pos.
-    // tmp->next_ = other.head_;
-    // other.tail_ = tmp->next_;
+    Node* tmp = pos.getnode();
+    Node* prev = tmp->prev_;
+    prev->next_ = other.head_;
+    other.head_->prev_ = prev;
+    other.tail_->next_ = tmp;
+    tmp->prev_ = other.tail_;
+    if (prev == base_) head_ = other.head_;
+    if (tmp == base_) tail_ = other.tail_;
+    other.head_ = other.base_;
+    other.count = 0;
   }
   void reverse() {}
   void unique() {}
