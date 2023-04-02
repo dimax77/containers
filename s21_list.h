@@ -317,7 +317,13 @@ class List {
       }
     }
   }
-  void sort() {}
+  void sort() {
+    List<T> l1, l2;
+    List<List> tmp;
+    while(head_ != base_) {
+      
+    }
+  }
 
  private:
   // Inner functions
