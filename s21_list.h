@@ -234,32 +234,63 @@ class List {
     other.tail_ = tmp_tail;
     other.count = tmp_count;
   }
+  // void merge(List& other) {
+  //   auto it_this_cur = begin();
+  //   auto it_this_end = end();
+  //   auto it_other_cur = other.begin();
+  //   auto it_other_end = other.end();
+  //   s21::List<T> tmp;
+  //   while (it_this_cur != it_this_end) {
+  //     while (it_other_cur != it_other_end) {
+  //       if (*it_this_cur > *it_other_cur) {
+  //         tmp.push_back(*it_other_cur++);
+  //       } else if (*it_this_cur == *it_other_cur) {
+  //         tmp.push_back(*it_other_cur++);
+  //       } else {
+  //         tmp.push_back(*it_this_cur++);
+  //         break;
+  //       }
+  //     }
+  //     if (it_other_cur == it_other_end) break;
+  //   }
+  //   while (it_this_cur != it_this_end) {
+  //     tmp.push_back(*(it_this_cur++));
+  //   }
+  //   while (it_other_cur != it_other_end) {
+  //     tmp.push_back(*(it_other_cur++));
+  //   }
+  //   other.clear();
+  //   *this = tmp;
+  // }
+  Node* merge_(Node* a, Node* b) {
+    Node* res = nullptr;
+    if (!a) return b;
+    if (!b) return a;
+    if (a->val_ <= b->val_) {
+      res = a;
+      res->next_ = merge_(a->next_, b);
+    } else {
+      res = b;
+      res->next_ = merge_(a, b->next_);
+    }
+    return res;
+  };
   void merge(List& other) {
-    auto it_this_cur = begin();
-    auto it_this_end = end();
-    auto it_other_cur = other.begin();
-    auto it_other_end = other.end();
-    s21::List<T> tmp;
-    while (it_this_cur != it_this_end) {
-      while (it_other_cur != it_other_end) {
-        if (*it_this_cur > *it_other_cur) {
-          tmp.push_back(*it_other_cur++);
-        } else if (*it_this_cur == *it_other_cur) {
-          tmp.push_back(*it_other_cur++);
-        } else {
-          tmp.push_back(*it_this_cur++);
-          break;
-        }
-      }
-      if (it_other_cur == it_other_end) break;
+    List tmp(this->size() + other.size());
+    Node* t = base_->next_;
+    Node* t_l = base_->prev_;
+    t_l->next_ = nullptr;
+    Node* t_o = other.base_->next_;
+    Node* o = other.base_->prev_;
+    o->next_ = nullptr;
+    Node* res = merge_(t, t_o);
+    for (auto it = tmp.begin(); it != tmp.end(); ++it) {
+      *it = res->val_;
+      res = res->next_;
     }
-    while (it_this_cur != it_this_end) {
-      tmp.push_back(*(it_this_cur++));
-    }
-    while (it_other_cur != it_other_end) {
-      tmp.push_back(*(it_other_cur++));
-    }
+    res = tmp.base_;
     *this = tmp;
+    other.clear();
   }
   void splice(const_iterator pos, List& other) {
     Node* tmp = pos.getnode();
@@ -283,45 +314,48 @@ class List {
     }
     reverse_node(tail_);
   }
+  // void unique() {
+  //   Node* tmp = head_;
+  //   Node* ne = tmp->next_;
+  //   auto it = ++begin();
+  //   auto tmp_it = it;
+  //   tmp_it++;
+  //   while (tmp != base_) {
+  //     for (it; it != end(); ++it) {
+  //       if (tmp->val_ == *it) {
+  //         Node* p = tmp->prev_;
+  //         Node* n = tmp->next_;
+  //         p->next_ = n;
+  //         n->prev_ = p;
+  //         if (tmp->prev_ == base_) head_ = tmp->next_;
+  //         if (tmp->next_ == base_) tail_ = tmp->prev_;
+  //         delete tmp;
+  //         count--;
+  //         tmp = 0;
+  //         break;
+  //       }
+  //     }
+  //     if (tmp) {
+  //       tmp = tmp->next_;
+  //       ne = tmp->next_;
+  //       it = tmp_it;
+  //       tmp_it++;
+  //     } else {
+  //       tmp = ne;
+  //       ne = ne->next_;
+  //       it = tmp_it;
+  //       tmp_it++;
+  //     }
+  //   }
+  // }
   void unique() {
-    Node* tmp = head_;
-    Node* ne = tmp->next_;
-    auto it = ++begin();
-    auto tmp_it = it;
-    tmp_it++;
-    while (tmp != base_) {
-      for (it; it != end(); ++it) {
-        if (tmp->val_ == *it) {
-          Node* p = tmp->prev_;
-          Node* n = tmp->next_;
-          p->next_ = n;
-          n->prev_ = p;
-          if (tmp->prev_ == base_) head_ = tmp->next_;
-          if (tmp->next_ == base_) tail_ = tmp->prev_;
-          delete tmp;
-          count--;
-          tmp = 0;
-          break;
-        }
-      }
-      if (tmp) {
-        tmp = tmp->next_;
-        ne = tmp->next_;
-        it = tmp_it;
-        tmp_it++;
-      } else {
-        tmp = ne;
-        ne = ne->next_;
-        it = tmp_it;
-        tmp_it++;
-      }
-    }
+    Node* cur = base_->next_;
+    Node* next = cur->next_;
   }
   void sort() {
     List<T> l1, l2;
     List<List> tmp;
-    while(head_ != base_) {
-      
+    while (head_ != base_) {
     }
   }
 
@@ -349,12 +383,12 @@ class List {
     value_type val_;
     Node *next_, *prev_;
     Node() {
-      val_ = 0;
-      next_ = prev_ = 0;
+      val_ = {};
+      next_ = prev_ = nullptr;
     }
     Node(value_type val) {
       val_ = val;
-      next_ = prev_ = 0;
+      next_ = prev_ = nullptr;
     }
   };
   Node *base_, *head_, *tail_;

@@ -126,6 +126,8 @@ TEST(Methods, pop_front) {
 TEST(Methods, merge) {
   List<int> a({1, 2, 3, 6}), b({5, 6, 7, 8, 9});
   a.merge(b);
+  for (auto it : a) cout << it;
+  cout << endl;
   EXPECT_EQ(a.size(), 9);
   List<int> c({1, 2, 3, 4}), d({5, 6, 7, 8, 9, 10});
   c.merge(d);
