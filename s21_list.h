@@ -234,7 +234,7 @@ class List {
     other.tail_ = tmp_tail;
     other.count = tmp_count;
   }
-  // void merge(List& other) {
+  // void merge_with_iters(List& other) {
   //   auto it_this_cur = begin();
   //   auto it_this_end = end();
   //   auto it_other_cur = other.begin();
@@ -307,14 +307,13 @@ class List {
   void reverse() {
     base_->next_ = tail_;
     base_->prev_ = head_;
-
     while (head_ != tail_) {
       reverse_node(head_);
       head_ = head_->prev_;
     }
     reverse_node(tail_);
   }
-  // void unique() {
+  // void full_unique() {
   //   Node* tmp = head_;
   //   Node* ne = tmp->next_;
   //   auto it = ++begin();
@@ -348,14 +347,27 @@ class List {
   //     }
   //   }
   // }
+
   void unique() {
-    Node* cur = base_->next_;
-    Node* next = cur->next_;
+    auto cur = begin();
+    while (cur != end()) {
+      auto test_node = cur;
+      auto next = ++cur;
+      if (next == end()) break;
+      if (*test_node == *next) erase(test_node);
+    }
+  }
+  void breake_list(List& l) {
+    Node* tmp = base_->prev_;
+    tmp->next_ = nullptr;
   }
   void sort() {
-    List<T> l1, l2;
-    List<List> tmp;
-    while (head_ != base_) {
+    breake_list(this);
+    Node* cur = base_->next_;
+    if (!cur) return;
+    Node* next = cur->next_;
+    while (next != nullptr) {
+      cur;
     }
   }
 
